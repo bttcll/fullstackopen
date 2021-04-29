@@ -1,2 +1,2 @@
 # fullstackopen
-private repo exercises submission
+public repo exercises submission
