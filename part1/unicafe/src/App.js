@@ -13,15 +13,30 @@ const App = () => {
     const average = (good - bad) / all;
     const positive = good / all * 100;
 
+    const Display = () => {
+      if (all > 0) {
+        return (
+          <div>
+            <p>good {good}</p>
+            <p>neutral {neutral}</p>
+            <p>bad {bad}</p>
+            <p>all {all}</p>
+            <p>average {average}</p>
+            <p>positive {positive}%</p>
+          </div>
+        )
+      }
+      else {
+        return (
+          <div>No feedback given</div>
+        )
+      }
+    }
+
     return (
       <div>
         <h1>statistics</h1>
-        <p>good {good}</p>
-        <p>neutral {neutral}</p>
-        <p>bad {bad}</p>
-        <p>all {all}</p>
-        <p>average {average}</p>
-        <p>positive {positive}%</p>
+        <Display />
       </div>
     )
   }
