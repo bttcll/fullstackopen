@@ -6,8 +6,12 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
+  const Statistic = (props) => {
+    return (<p>{props.text} {props.value}</p>)
+  }
+
   // do not define a component within another component
-  const Statistics = (props) => {
+  const Statistics = () => {
 
     const all = good + neutral + bad;
     const average = (good - bad) / all;
@@ -17,12 +21,12 @@ const App = () => {
       if (all > 0) {
         return (
           <div>
-            <p>good {good}</p>
-            <p>neutral {neutral}</p>
-            <p>bad {bad}</p>
-            <p>all {all}</p>
-            <p>average {average}</p>
-            <p>positive {positive}%</p>
+            <Statistic text="good" value={good} />
+            <Statistic text="neutral" value={neutral} />
+            <Statistic text="bad" value={bad} />
+            <Statistic text="all" value={all} />
+            <Statistic text="average" value={average} />
+            <Statistic text="positive" value={positive} />
           </div>
         )
       }
@@ -41,12 +45,22 @@ const App = () => {
     )
   }
 
+  const Button = (props) => {
+    if ("good" === props.text)
+      return (<button onClick={() => setGood(props.value + 1)}>{props.text}</button>)
+    else if ("neutral" === props.text)
+      return (<button onClick={() => setNeutral(props.value + 1)}>{props.text}</button>)
+    else
+      return (<button onClick={() => setBad(props.value + 1)}>{props.text}</button>)
+
+  }
+
   return (
     <div>
       <h1>give feedback</h1>
-      <button onClick={() => setGood(good + 1)}>good</button>
-      <button onClick={() => setNeutral(neutral + 1)}>neutral</button>
-      <button onClick={() => setBad(bad + 1)}>bad</button>
+      <Button value={good} text="good" />
+      <Button value={neutral} text="neutral" />
+      <Button value={bad} text="bad" />
       <Statistics />
     </div>
   )
