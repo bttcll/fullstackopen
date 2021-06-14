@@ -7,7 +7,12 @@ const App = () => {
   const [bad, setBad] = useState(0)
 
   const Statistic = (props) => {
-    return (<p>{props.text} {props.value}</p>)
+    return (
+      <tr>
+        <td>{props.text}</td>
+        <td>{props.value}</td>
+      </tr>
+    )
   }
 
   // do not define a component within another component
@@ -20,14 +25,16 @@ const App = () => {
     const Display = () => {
       if (all > 0) {
         return (
-          <div>
+          <table>
+            <tbody>
             <Statistic text="good" value={good} />
             <Statistic text="neutral" value={neutral} />
             <Statistic text="bad" value={bad} />
             <Statistic text="all" value={all} />
             <Statistic text="average" value={average} />
             <Statistic text="positive" value={positive} />
-          </div>
+            </tbody>
+          </table>
         )
       }
       else {
