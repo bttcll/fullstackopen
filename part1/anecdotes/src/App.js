@@ -16,6 +16,7 @@ const App = () => {
   const Anecdotes = () => {
     return (
       <div>
+        <h1>Anecdote of the day</h1>
         {anecdotes[selected]}
         <br></br>
         has {points[selected]} votes
@@ -23,12 +24,24 @@ const App = () => {
     )
   }
 
+  const First = () => {
+    const copy = [...points]
+    const max = copy.indexOf(Math.max(...copy))
+    console.log(max)
+    return (
+      <div>
+        <h1>Anecdote with most votes</h1>
+        {anecdotes[max]}
+        <br></br>
+        has {points[max]} votes
+      </div>
+    )
+  }
+
   const Next = () => {
     console.log(selected);
     return (
-      <div>
-        <button onClick={() => setSelected(Math.floor(Math.random() * anecdotes.length))}>next anecdote</button>
-      </div>
+      <button onClick={() => setSelected(Math.floor(Math.random() * anecdotes.length))}>next anecdote</button>
     )
   }
 
@@ -42,9 +55,7 @@ const App = () => {
     }
 
     return (
-      <div>
-        <button onClick={setVote}>vote</button>
-      </div>
+      <button onClick={setVote}>vote</button>
     )
   }
 
@@ -53,7 +64,7 @@ const App = () => {
       <Anecdotes />
       <Vote />
       <Next />
-
+      <First />
     </div>
   )
 }
