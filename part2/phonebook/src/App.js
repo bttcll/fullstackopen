@@ -17,11 +17,23 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    const person = {
-      name: newName,
+
+    const personsName = persons.map(person => person.name)
+
+    if (personsName.includes(newName)) {
+      alertFunction()
+    } else {
+      const person = {
+        name: newName,
+      }
+      setPersons(persons.concat(person))
+      setNewName('')
     }
-    setPersons(persons.concat(person))
-    setNewName('')
+
+  }
+
+  const alertFunction = () => {
+    window.alert(`${newName} is already added to phonebook`);
   }
 
 
@@ -30,7 +42,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={addPerson}>
         <div>
-          name: <input value={newName} onChange={handlePersonChange}/>
+          name: <input value={newName} onChange={handlePersonChange} />
         </div>
         <div>
           <button type="submit">add</button>
