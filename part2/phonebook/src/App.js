@@ -2,17 +2,13 @@ import React, { useState } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', number: '123456789' }
   ])
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
-  const Person = (props) => {
-    return <div>{props.name}</div>
-  }
-
-  const handlePersonChange = (event) => {
-    console.log(event.target.value)
-    setNewName(event.target.value)
+  const Person = ({ person }) => {
+    return <div>{person.name} {person.number}</div>
   }
 
   const addPerson = (event) => {
@@ -25,11 +21,22 @@ const App = () => {
     } else {
       const person = {
         name: newName,
+        number: newNumber
       }
       setPersons(persons.concat(person))
       setNewName('')
+      setNewNumber('')
     }
 
+  }
+
+  const handleNameChange = (event) => {
+    console.log(event.target.value)
+    setNewName(event.target.value)
+  }
+  const handleNumberChange = (event) => {
+    console.log(event.target.value)
+    setNewNumber(event.target.value)
   }
 
   const alertFunction = () => {
@@ -42,7 +49,10 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={addPerson}>
         <div>
-          name: <input value={newName} onChange={handlePersonChange} />
+          name: <input value={newName} onChange={handleNameChange}/>
+        </div>
+        <div>
+          number: <input value={newNumber} onChange={handleNumberChange}/>
         </div>
         <div>
           <button type="submit">add</button>
@@ -54,7 +64,7 @@ const App = () => {
 
       <ul>
         {persons.map(person =>
-          <Person name={person.name} />
+          <Person key={person.name} person={person} />
         )}
       </ul>
 
