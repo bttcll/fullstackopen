@@ -8,7 +8,14 @@ const Countries = (props) => {
     props.countries.filter(country => country.name.common.toUpperCase().includes(props.newFilter.toUpperCase()))
 
   const Country = ({ country }) => {
-    return <div>{country.name.common}</div>
+
+    const name = country.name.common;
+
+    return (
+      <div>
+        {name} <button onClick={e => props.filterButton(e, name)}>show</button>
+      </div>
+    );
   }
 
   const TooMany = () => { return <div>Too many matches, specify another filter</div> }
@@ -31,7 +38,11 @@ const Countries = (props) => {
 
   if (countriesToShow.length > 10) return <TooMany />
   else if (countriesToShow.length === 1) return <SingleCoutry country={countriesToShow[0]} />
-  else return (<div>{countriesToShow.map(country => <Country key={country.name.common} country={country} />)}</div>)
+  else return (
+    <div>
+      {countriesToShow.map(country => <Country key={country.name.common} country={country} />)}
+    </div>
+  );
 
 }
 
@@ -42,6 +53,13 @@ const App = () => {
   const handleFilterChange = (event) => {
     console.log(event.target.value)
     setFilter(event.target.value)
+  }
+
+  const filterButton = (e, name) => {
+    e.preventDefault();
+    console.log("click")
+    console.log(name)
+    setFilter(name)
   }
 
 
@@ -61,7 +79,7 @@ const App = () => {
     <div>
       <Filter value={newFilter} onChange={handleFilterChange} />
       <br />
-      <Countries countries={countries} newFilter={newFilter} />
+      <Countries countries={countries} newFilter={newFilter} filterButton={filterButton} />
     </div>
   )
 }
