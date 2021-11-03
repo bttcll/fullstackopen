@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 
 const Filter = props => <div>filter shown with: <input value={props.value} onChange={props.onChange} /></div>
 
@@ -20,6 +20,7 @@ const PersonForm = (props) => {
 }
 
 const Persons = (props) => {
+
   const personsToShow =
     props.persons.filter(person => person.name.toUpperCase().includes(props.newFilter.toUpperCase()))
 
@@ -48,13 +49,19 @@ const App = () => {
     if (personsName.includes(newName)) {
       alertFunction()
     } else {
-      const person = {
+      const personObject = {
         name: newName,
         number: newNumber
       }
-      setPersons(persons.concat(person))
-      setNewName('')
-      setNewNumber('')
+
+      personService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+
     }
 
   }
@@ -78,11 +85,14 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
         console.log('promise fulfilled')
-        setPersons(response.data)
+      })
+      .catch(error => {
+        console.log('fail')
       })
   }, [])
   console.log('render', persons.length, 'notes')
