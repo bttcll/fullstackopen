@@ -25,7 +25,12 @@ const Persons = (props) => {
     props.persons.filter(person => person.name.toUpperCase().includes(props.newFilter.toUpperCase()))
 
   const Person = ({ person }) => {
-    return <div>{person.name} {person.number}</div>
+    return (
+      <div>
+        {person.name} {person.number}
+        <button onClick={e => props.deletePerson(e, person.id)}>delete</button>
+      </div>
+    );
   }
 
   return (
@@ -63,6 +68,30 @@ const App = () => {
         })
 
     }
+
+  }
+
+  const deletePerson = (event, id) => {
+    event.preventDefault()
+
+    const personSelected = persons[id - 1].name;
+
+    if (window.confirm(`Delete '${personSelected}' ?`)) {
+      personService
+        .remove(id)
+        .then(returnedPerson => {
+          setPersons(persons.filter(person => person.id !== id))
+          setNewName('')
+          setNewNumber('')
+        })
+        .catch(error => {
+          alert(
+            `'${personSelected}' was already deleted from server`
+          )
+        })
+    }
+
+
 
   }
 
@@ -112,7 +141,7 @@ const App = () => {
 
       <div>debug: {newName}</div>
 
-      <Persons persons={persons} newFilter={newFilter} />
+      <Persons persons={persons} newFilter={newFilter} deletePerson={deletePerson} />
 
     </div>
   )
