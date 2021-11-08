@@ -52,7 +52,23 @@ const App = () => {
     const personsName = persons.map(person => person.name)
 
     if (personsName.includes(newName)) {
-      alertFunction()
+      if (window.confirm(`'${newName}' is already added to phonebook, raplace the old number with a new one?`)) {
+        const person = persons.find(p => p.name === newName)
+        const changedPerson = { ...person, number: newNumber }
+        const id = changedPerson.id;
+
+        personService
+          .update(id, changedPerson).then(returnedPerson => {
+            setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+          })
+          .catch(error => {
+            alert(
+              `'${person}' was already deleted from server`
+            )
+            setPersons(persons.filter(p => p.id !== id))
+          })
+
+      }
     } else {
       const personObject = {
         name: newName,
