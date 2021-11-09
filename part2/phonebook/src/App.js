@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import personService from './services/persons'
 
+
 const Filter = props => <div>filter shown with: <input value={props.value} onChange={props.onChange} /></div>
 
 const PersonForm = (props) => {
@@ -40,11 +41,24 @@ const Persons = (props) => {
   )
 }
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="add">
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setFilter] = useState('')
+  const [addMessage, setAddMessage] = useState(null)
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -60,6 +74,8 @@ const App = () => {
         personService
           .update(id, changedPerson).then(returnedPerson => {
             setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+            setNewName('')
+            setNewNumber('')
           })
           .catch(error => {
             alert(
@@ -67,6 +83,13 @@ const App = () => {
             )
             setPersons(persons.filter(p => p.id !== id))
           })
+
+        setAddMessage(
+          `Updated '${newName}'`
+        )
+        setTimeout(() => {
+          setAddMessage(null)
+        }, 2000)
 
       }
     } else {
@@ -83,6 +106,13 @@ const App = () => {
           setNewNumber('')
         })
 
+      setAddMessage(
+        `Added '${newName}'`
+      )
+      setTimeout(() => {
+        setAddMessage(null)
+      }, 2000)
+
     }
 
   }
@@ -90,9 +120,9 @@ const App = () => {
   const deletePerson = (event, id) => {
     event.preventDefault()
 
-    const personSelected = persons[id - 1].name;
+    const personSelected = persons.find(p => p.id === id)
 
-    if (window.confirm(`Delete '${personSelected}' ?`)) {
+    if (window.confirm(`Delete '${personSelected.name}' ?`)) {
       personService
         .remove(id)
         .then(returnedPerson => {
@@ -146,6 +176,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message={addMessage} />
 
       <Filter value={newFilter} onChange={handleFilterChange} />
 
