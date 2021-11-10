@@ -47,8 +47,8 @@ const Notification = ({ message }) => {
   }
 
   return (
-    <div className="add">
-      {message}
+    <div className={message[1]}>
+      {message[0]}
     </div>
   )
 }
@@ -58,7 +58,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setFilter] = useState('')
-  const [addMessage, setAddMessage] = useState(null)
+  const [message, setMessage] = useState(null)
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -78,17 +78,24 @@ const App = () => {
             setNewNumber('')
           })
           .catch(error => {
-            alert(
-              `'${person}' was already deleted from server`
-            )
+
+            const m = []
+            m.push('Person was already removed from server')
+            m.push('error')
+            setMessage(m)
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+
             setPersons(persons.filter(p => p.id !== id))
           })
 
-        setAddMessage(
-          `Updated '${newName}'`
-        )
+        const m = []
+        m.push(`Updated '${newName}'`)
+        m.push('add')
+        setMessage(m)
         setTimeout(() => {
-          setAddMessage(null)
+          setMessage(null)
         }, 2000)
 
       }
@@ -106,11 +113,13 @@ const App = () => {
           setNewNumber('')
         })
 
-      setAddMessage(
-        `Added '${newName}'`
-      )
+      const m = []
+      m.push(`Added '${newName}'`)
+      m.push('add')
+      setMessage(m)
+
       setTimeout(() => {
-        setAddMessage(null)
+        setMessage(null)
       }, 2000)
 
     }
@@ -131,9 +140,13 @@ const App = () => {
           setNewNumber('')
         })
         .catch(error => {
-          alert(
-            `'${personSelected}' was already deleted from server`
-          )
+          const m = []
+          m.push('Person was already removed from server')
+          m.push('error')
+          setMessage(m)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         })
     }
 
@@ -177,7 +190,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      <Notification message={addMessage} />
+      <Notification message={message} />
 
       <Filter value={newFilter} onChange={handleFilterChange} />
 
